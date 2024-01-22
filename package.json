@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "dependencies": {
+    "http-server": "^14.1.1",
+    "openai": "^4.25.0",
+    "punycode": "^2.3.1"
+  }
+}

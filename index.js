@@ -1,8 +1,9 @@
 import { Configuration, OpenAIApi } from 'openai'
 import { process } from './env'
 
+
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: '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',
 })
 
 const openai = new OpenAIApi(configuration)
@@ -19,11 +20,11 @@ const conversationArr = [
 document.addEventListener('submit', (e) => {
     e.preventDefault()
     const userInput = document.getElementById('user-input')   
-    conversationArr.push({
+    conversationArr.push({ 
         role: 'user',
         content: userInput.value
     })
-    console.log(conversationArr)
+    fetchReply()
     const newSpeechBubble = document.createElement('div')
     newSpeechBubble.classList.add('speech', 'speech-human')
     chatbotConversation.appendChild(newSpeechBubble)
@@ -31,6 +32,18 @@ document.addEventListener('submit', (e) => {
     userInput.value = ''
     chatbotConversation.scrollTop = chatbotConversation.scrollHeight
 })
+
+async function fetchReply(){
+    const response = await openai.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+        messages: conversationArr,
+        presence_penalty: 0
+    }) 
+    conversationArr.push(response.data.choices[0].message)
+    renderTypewriterText(response.data.choices[0].message.content)
+    console.log(completion.choices[0]);
+
+}
 
 function renderTypewriterText(text) {
     const newSpeechBubble = document.createElement('div')
@@ -47,3 +60,4 @@ function renderTypewriterText(text) {
         chatbotConversation.scrollTop = chatbotConversation.scrollHeight
     }, 50)
 }
+
